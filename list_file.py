@@ -13,6 +13,11 @@ for base_path,folder_list,file_list in os.walk(root_path):
  for file_names in file_list:
   file_path = os.path.join(base_path,file_names)
   file_ext = file_path.rsplit('.',1)
-  print file_path
+#  print file_path
+#  print file_ext
+#  print len(file_ext)
+  if len(file_ext) != 2:
+    continue
+  if file_ext[1] != 'py':
+    continue
   print file_ext
-
