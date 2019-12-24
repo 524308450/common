@@ -1,0 +1,52 @@
+安装git
+    yum -y install git
+
+git基本使用：
+http://git.yihecloud.com    用户名：wangjingjing 密码：wangjingjing136. 
+1. 登陆 -> profile settings -> ssh keys -> 创建ssh key： 
+	a. ssh-keygen -t rsa -C "jjwang@yihecloud.com"  //一路回车
+	b. cat ~/.ssh/id_rsa.pub
+
+2. 配置git环境： 
+	git config --global user.name "wangjingjing"
+	git config --global user.email "jjwang@yihecloud.com"
+
+3. 下载代码（克隆代码）
+	git clone URL
+	* 本地： 暂存区， 工作区
+       git clone git@git.yihecloud.com:PaaS/OpenBridge-NginxMod.git
+       ssh -T git@git.yihecloud.com   //测试链接
+
+4. 查看diff和状态
+	git diff
+	git status
+
+5. 恢复删除的文件
+	git checkout -- filename
+
+6. 提交代码：
+	a. 添加文件index: git add yourcode
+		* note: git status / git diff
+	b. 提交文件到本地分支： git commit -m "your information."
+		* note：git status / git diff 
+	c. 合并到gitlab服务器master分支上：
+		* note： git push -u origin master 
+	d. 去gitlab查看是否成功；
+
+7. 查看历史日志： git log
+
+8. 更新代码： git pull
+
+9、更新线上
+10、查看分支
+    git branch -r/-a
+
+11、创建分支
+    git checkout -b branchname    --直接创建一个分支，然后切换到新分支
+    git branch branchname + git checkout branchname --创建及切换分支
+12、将新创建的分支推送到github上
+     git push origin branchname
+13、删除本地分支
+    git branch -d branchname
+14、删除github上的远程分支
+    git push origin :wjjtest
