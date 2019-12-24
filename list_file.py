@@ -9,6 +9,7 @@ for item in os.walk(root_path):
     print(item)
 
 #拼接文件路径,python2.7下,不能使用maxspli参数
+total_num = 0
 for base_path,folder_list,file_list in os.walk(root_path):
  for file_names in file_list:
   file_path = os.path.join(base_path,file_names)
@@ -25,4 +26,7 @@ for base_path,folder_list,file_list in os.walk(root_path):
   with open(file_path,'rb') as f:
    for line in f:
      file_num += 1
-   print file_num
+#   print file_num
+   total_num += file_num
+   print(file_num,file_path)
+   print (total_num)
