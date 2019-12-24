@@ -32,6 +32,8 @@ http://git.yihecloud.com    用户名：wangjingjing 密码：wangjingjing136.
 	c. 合并到gitlab服务器master分支上：
 		* note： git push -u origin master 
 	d. 去gitlab查看是否成功；
+	e. 提交项目；
+                * node:  git add .
 
 7. 查看历史日志： git log
 
