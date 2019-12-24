@@ -52,3 +52,15 @@ http://git.yihecloud.com    用户名：wangjingjing 密码：wangjingjing136.
     git branch -d branchname
 14、删除github上的远程分支
     git push origin :wjjtest
+15、合并分支
+  # 切换到master分支
+    git checkout master
+
+  # 将dev分支的代合并到master
+    git merge dev
+
+  # 查看状态
+    git status
+
+  # 推送
+    git push origin master
