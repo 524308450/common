@@ -20,4 +20,9 @@ for base_path,folder_list,file_list in os.walk(root_path):
     continue
   if file_ext[1] != 'py':
     continue
-  print file_ext
+#  print file_ext
+  file_num = 0
+  with open(file_path,'rb') as f:
+   for line in f:
+     file_num += 1
+   print file_num
