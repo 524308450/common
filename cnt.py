@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-###continue 语句跳出本次循环，而break跳出整个循环###
+###continue 语句跳出本次循环，而break跳出整个循环####
 ###continue 语句用来告诉Python跳过当前循环的剩余语句，然后继续进行下一轮循环###
 
 for i in 'Python':
