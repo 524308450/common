@@ -24,9 +24,16 @@ for base_path,folder_list,file_list in os.walk(root_path):
 #  print file_ext
   file_num = 0
   with open(file_path,'rb') as f:
-   for line in f:
+    for line in f:
+     ###过滤掉空行
+     line = line.strip()
+     if not line:
+      continue
+     ###过滤掉#开头的
+     if line.startswith(b'#'):
+      continue
      file_num += 1
 #   print file_num
-   total_num += file_num
-   print(file_num,file_path)
-   print (total_num)
+  total_num += file_num
+  print(file_num,file_path)
+  print(total_num)
