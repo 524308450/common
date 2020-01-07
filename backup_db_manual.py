@@ -4,10 +4,35 @@ import os
 import time
 import datetime
 #定义服务器，用户名、密码、数据库名称（多个库分行放置）和备份的路径
-DB_HOST = raw_input('请输入数据库地址：')
-DB_USER = raw_input('请输入数据库用户名：')
-DB_USER_PASSWD = raw_input('请输入数据库密码：')
-DB_NAME = raw_input('请输入需要备份数据库库名：')
+while True:
+ DB_HOST = raw_input('请输入数据库地址：').strip()
+ if len(DB_HOST) == 0:
+  continue
+ else:
+  break
+
+while True:
+ DB_USER = raw_input('请输入数据库用户名：').strip()
+ if len(DB_USER) == 0:
+  continue
+ else:
+  break
+
+while True:
+ DB_USER_PASSWD = raw_input('请输入数据库密码：').strip()
+ if len(DB_USER_PASSWD) == 0:
+  continue
+ else:
+  break
+
+while True:
+ DB_NAME = raw_input('请输入需要备份数据库库名：').strip()
+ if len(DB_NAME) == 0:
+  continue
+ else:
+  break
+
+
 BACKUP_PATH = '/home/mysql/'
 
 DATETIME = time.strftime('%Y%m%d-%H%M%S')
