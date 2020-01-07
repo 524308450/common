@@ -6,6 +6,7 @@ import datetime
 #定义服务器，用户名、密码、数据库名称（多个库分行放置）和备份的路径
 while True:
  DB_HOST = raw_input('请输入数据库地址：').strip()
+ print DB_HOST
  if len(DB_HOST) == 0:
   continue
  else:
@@ -47,7 +48,7 @@ print("checking for databases names file")
 time.sleep(3)
 
 #定义执行备份脚本，读取文件中的数据库名称，注意按行读写，不校验是否存在该库
-dumpcmd = "mysqldump -u" +DB_USER + " -p"+DB_USER_PASSWD+" " +DB_NAME+" > "+TODAYBACKUPPATH +"/"+DB_NAME+".sql"
+dumpcmd = "mysqldump -u" +DB_USER + " -h"+DB_HOST + " -p"+DB_USER_PASSWD+" " +DB_NAME+" > "+TODAYBACKUPPATH +"/"+DB_NAME+".sql"
 print(dumpcmd)
 time.sleep(3)
 os.system(dumpcmd)
