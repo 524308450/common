@@ -4,6 +4,9 @@ import os
 import time
 import datetime
 #定义服务器，用户名、密码、数据库名称（多个库分行放置）和备份的路径
+#if user.isspace()  or user.isdigit():       #  如果用户输入的是空或者数字，则继续输入
+#elif user is '' or password is '':      #否则如果，用户和密码输入的什么都不是，则继续输入
+
 while True:
  DB_HOST = raw_input('请输入数据库地址：').strip()
  print DB_HOST
