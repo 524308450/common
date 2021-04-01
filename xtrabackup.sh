@@ -33,21 +33,30 @@ backup_date=`date +%F`
 # 备份日期
 backup_week_day=`date +%u`
 
+# 备份日期
+backup_date_count=`date -d "-$backup_week_day day" +%F`
+
 # 判断是应该全备还是增量备份
 # 0:full, 1:incr
 function get_backup_type() {
-  if [ "$full_backup_week_day" -eq `date +%u` ]; then
+
+  if [[ ! -d ${backup_dir}/${full_backup}_${backup_date_count} ]] || [[ "$full_backup_week_day" -eq "$backup_week_day" ]]; then
     backup_type=0
   else
     backup_type=1
   fi
+
   return $backup_type
 }
 
 # 全量备份
 function full_backup() {
-  
-  backup_folder=${full_backup}_${backup_date}
+
+  if [[ ! -d ${backup_dir}/${full_backup}_${backup_date_count} ]] && [[ "$full_backup_week_day" -eq "$backup_week_day" ]]; then
+    backup_folder=${full_backup}_${backup_date}
+  else
+    backup_folder=${full_backup}_${backup_date_count}
+  fi
      
   mkdir -p $backup_dir/$backup_folder
   xtrabackup \
@@ -69,62 +78,16 @@ function increment_backup() {
 
   incr_base_folder=${increment_backup}_${backup_date} 
   mkdir -p $backup_dir/$incr_base_folder
+    
+    xtrabackup \
+      --defaults-file=$mysql_conf_file \
+      --user=$user \
+      --password=$password \
+      --no-lock \
+      --backup \
+      --target-dir=$backup_dir/$incr_base_folder \
+      --incremental-dir=$backup_dir/${full_backup}_${backup_date_count}
 
-  if [ `date +%u` -eq 1 ]; then
-    xtrabackup \
-      --defaults-file=$mysql_conf_file \
-      --user=$user \
-      --password=$password \
-      --no-lock \
-      --backup \
-      --target-dir=$backup_dir/$incr_base_folder \
-      --incremental-dir=$backup_dir/${full_backup}_`date -d "-1 day" +%F`
-  elif [ `date +%u` -eq 2 ]; then
-    xtrabackup \
-      --defaults-file=$mysql_conf_file \
-      --user=$user \
-      --password=$password \
-      --no-lock \
-      --backup \
-      --target-dir=$backup_dir/$incr_base_folder \
-      --incremental-dir=$backup_dir/${full_backup}_`date -d "-2 day" +%F`
-  elif [ `date +%u` -eq 3 ]; then
-    xtrabackup \
-      --defaults-file=$mysql_conf_file \
-      --user=$user \
-      --password=$password \
-      --no-lock \
-      --backup \
-      --target-dir=$backup_dir/$incr_base_folder \
-      --incremental-dir=$backup_dir/${full_backup}_`date -d "-3 day" +%F`
-  elif [ `date +%u` -eq 4 ]; then
-    xtrabackup \
-      --defaults-file=$mysql_conf_file \
-      --user=$user \
-      --password=$password \
-      --no-lock \
-      --backup \
-      --target-dir=$backup_dir/$incr_base_folder \
-      --incremental-dir=$backup_dir/${full_backup}_`date -d "-4 day" +%F`
-  elif [ `date +%u` -eq 5 ]; then
-    xtrabackup \
-      --defaults-file=$mysql_conf_file \
-      --user=$user \
-      --password=$password \
-      --no-lock \
-      --backup \
-      --target-dir=$backup_dir/$incr_base_folder \
-      --incremental-dir=$backup_dir/${full_backup}_`date -d "-5 day" +%F`
-  elif [ `date +%u` -eq 6 ]; then
-    xtrabackup \
-      --defaults-file=$mysql_conf_file \
-      --user=$user \
-      --password=$password \
-      --no-lock \
-      --backup \
-      --target-dir=$backup_dir/$incr_base_folder \
-      --incremental-dir=$backup_dir/${full_backup}_`date -d "-6 day" +%F`
-  fi
   return $?
 }
 
@@ -137,13 +100,9 @@ function delete_before_backup() {
 
 # 将之前备份的数据打包、压缩
 function backup_tar() {
-  if [ ! -d $backup_tar_dir ]; then
 
     mkdir -p $backup_tar_dir
-
-  fi
-
-  tar -zcf $backup_tar_dir/${backup_tar_mysql}_${backup_date}.tar.gz $backup_dir/*
+    tar -zcf $backup_tar_dir/${backup_tar_mysql}_${backup_date}.tar.gz $backup_dir/*
 }
 
 
@@ -157,27 +116,24 @@ function run() {
     0 )
       
       #全量备份之前，先打包备份之前的数据
-      if [ ! "ls -A $backup_dir" == ""  ]; then
-        echo "$backup_dir  目录不为空"
+      if [ "`ls -A $backup_dir`" == ""  ]; then
+
+        #执行全量备份
+        full_backup
+      else
+        
         backup_tar
       #打包之后，删除工作目录下备份信息
         delete_before_backup
-      else
-        echo "$backup_dir  目录为空"
+        full_backup
       fi
-      sleep 10
-      #执行全量备份
-      full_backup
-      backup_ok=$?
       ;;
     1 )
       
       #差异备份
       increment_backup  
-      backup_ok=$?
       ;;
   esac
 }
 
-#运行备份
 run
